@@ -228,12 +228,59 @@ FROM users
 WHERE user_id = 2;
 
 -- 1 - 1 (ONE - to - ONE)
--- Mô tả : Một bản ghi 
+-- Mô tả: Một bản ghi trong bảng A sẽ chỉ liên kết tới một bản ghi trong bảng B
 
--- 1 - Many (ONE - to - MANY)
--- Mô tả : Một bản ghi
+-- 1 - N (ONE - to - MANY)
+-- Mô tả: Một bản ghi trong bảng A có thể có nhiều bản ghi tương ứng bên trong bảng B
 
--- Many - Many (MANY - to - MANY)
+-- N - N (MANY - to - MANY)
+-- Mô tả: Một bản ghi trong bảng A có thể liên kết nhiều với bản ghi bên bảng B, và ngược lại
+
+-- INNER JOIN
+SELECT *
+FROM orders
+INNER JOIN users ON users.user_id = orders.user_id;
+
+-- TH1. Bảng có số lượng hàng bằng nhau
+-- Lấy bảng ở FROM làm chuẩn để so sánh
+
+-- TH2. Bảng có số lượng hàng chênh lệch
+-- Lấy bảng có số lượng hàng ít hơn làm chuẩn để so sánh
+
+-- LEFT JOIN: sẽ lấy tất cả các bản ghi bên TRÁI, ngay cả khi không có bản ghi khớp với bản ghi bên PHẢI
+SELECT *
+FROM users
+LEFT JOIN orders
+ON orders.user_id = users.user_id;
+
+-- RIGHT JOIN : sẽ lấy tất cả các bản ghi bên PHẢI, ngay cả khi không có bản ghi khớp với bản ghi bên TRÁI
+SELECT *
+FROM orders
+RIGHT JOIN users
+ON orders.user_id = users.user_id;
+
+-- CROSS JOIN : sẽ lấy tất cả
+SELECT *
+FROM orders
+CROSS JOIN users;
+
+-- GROUP BY : sẽ nhóm những dữ liệu giống nhau và thường được sử dụng với COUNT(), MAX(), MIN(), SUM(), AVG()
+-- COUNT : sẽ đếm số lượng trong lúc nhóm (GROUP BY)
+SELECT users.user_id, users.full_name, users.password, COUNT(orders.user_id) AS "order"
+FROM users
+INNER JOIN orders
+ON orders.user_id = users.user_id
+GROUP BY users.user_id;
+
+-- ORDER BY : sắp xếp
+-- ASC: sắp xếp tăng dần
+-- DESC: sắp xếp giảm dần
+SELECT users.user_id, users.full_name, users.password, COUNT(orders.user_id) AS "order"
+FROM users
+INNER JOIN orders
+ON orders.user_id = users.user_id
+GROUP BY users.user_id
+ORDER BY users.user_id DESC;
 
 -- BÀI TẬP
 -- Tìm 5 người đã like nhà hàng nhiều nhất
@@ -274,4 +321,13 @@ LEFT JOIN rate_res
 ON users.user_id = rate_res.user_id
 WHERE like_res.user_id IS NULL
 AND rate_res.user_id IS NULL
-AND orders.user_id IS NULL
+AND orders.user_id IS NULL;
+
+-- Tìm thức ăn có lượt mua nhiều nhất
+SELECT foods.food_id AS "Mã sản phẩm", foods.food_name AS "Tên sản phẩm", COUNT(orders.food_id) AS "Số lần được mua"
+FROM orders
+INNER JOIN foods
+ON orders.food_id = foods.food_id
+GROUP BY orders.food_id
+ORDER BY COUNT(orders.food_id) DESC
+LIMIT 1
