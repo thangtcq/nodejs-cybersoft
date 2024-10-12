@@ -4,11 +4,11 @@
 -- Sử dụng chữ HOA
 -- Dùng dấu chấm phẩy ";" để kết thúc dòng
 
--- Tạo CSDL / DB / Database
-CREATE DATABASE IF NOT EXISTS demo_database;
-
 -- Xóa CSDL / DB / Database
 DROP DATABASE IF EXISTS demo_database;
+
+-- Tạo CSDL / DB / Database
+CREATE DATABASE IF NOT EXISTS demo_database;
 
 -- Chọn DATABASE để thao tác
 USE demo_database;
