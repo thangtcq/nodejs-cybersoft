@@ -1,12 +1,13 @@
-import express from "express"
+import express from "express";
+import videoRouter from "./video.router.js";
 
-const rootRouter = express.Router()
-
-// rootRouter.use("/video", videoRouter)
-// rootRouter.use("/auth", authRouter)
+const rootRouter = express.Router();
 
 rootRouter.get(`/`, (request, respone, next) => {
-    respone.json(`ok`);
- });
+  respone.json(`ok`);
+});
 
-export default rootRouter
+rootRouter.use(`/video`, videoRouter);
+// rootRouter.use("/auth", authRouter)
+
+export default rootRouter;
